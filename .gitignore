@@ -1,0 +1,35 @@
+# IntelliJ project files
+.idea
+*.iml
+*.txt
+*.ipr
+*.iws
+out
+gen
+
+# Packaged files
+*.zip
+*.jar
+*.war
+*.rar
+*.ipa
+
+# Mac
+.DS_Store
+/.idea/*
+
+# Java class files
+*.class
+
+# Gradle files
+.gradle/
+build/
+
+# Log Files
+*.log
+
+# Temp Files
+**/*.tmp
+
+# Props
+fishfm.properties
