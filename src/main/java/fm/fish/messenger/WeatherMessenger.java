@@ -8,11 +8,9 @@ import fm.fish.pojo.openweather.current.WeatherToday;
 import fm.fish.pojo.openweather.forecast.WeatherForecast;
 import fm.fish.util.Phrases;
 import fm.fish.util.RandomUtil;
+import fm.fish.util.StringUtils;
 import org.telegram.telegrambots.bots.AbsSender;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,25 +23,15 @@ public class WeatherMessenger extends Messenger {
     private static final List<String> WEATHER_MSG_STARTER = Phrases.get(FishFmConfig.I.weatherStarter());
     private static final int DAY_HOUR_TO_SEND = 8;
     private final City city;
-    private LocalDateTime lastTimeSent;
 
     public WeatherMessenger(AbsSender bot, long chaId, City city) {
         super(bot, chaId);
         this.city = city;
     }
 
-    public static void main(String[] args) throws IOException {
-        Files.write(Paths.get("weather-starter.txt"), WEATHER_MSG_STARTER);
-    }
-
     @Override
     protected boolean shouldSend(LocalDateTime now) {
-        boolean needToSendToday = null == lastTimeSent || !lastTimeSent.toLocalDate().equals(now.toLocalDate());
-        if (needToSendToday && now.getHour() >= DAY_HOUR_TO_SEND) {
-            lastTimeSent = now;
-            return true;
-        }
-        return false;
+        return onceADay(now, DAY_HOUR_TO_SEND, 0);
     }
 
     @Override
@@ -133,7 +121,7 @@ public class WeatherMessenger extends Messenger {
         }
 
         public String getMsg() {
-            String emojiRow = new String(new char[3]).replace("\0", emoji);
+            String emojiRow = StringUtils.spawn(emoji, 3);
             return emojiRow + condition.toUpperCase() + emojiRow;
         }
 

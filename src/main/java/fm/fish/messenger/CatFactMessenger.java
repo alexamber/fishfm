@@ -13,7 +13,7 @@ public class CatFactMessenger extends Messenger {
 
     @Override
     protected boolean shouldSend(LocalDateTime now) {
-        return Math.random() <= 0.015;
+        return Math.random() <= 0.007;
     }
 
     @Override

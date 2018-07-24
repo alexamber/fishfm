@@ -1,7 +1,7 @@
 package fm.fish.engine.rest.api;
 
 import fm.fish.engine.rest.ServiceFactory;
-import fm.fish.pojo.openweather.advice.Advice;
+import fm.fish.pojo.advice.Advice;
 import retrofit2.Call;
 import retrofit2.http.GET;
 
@@ -16,6 +16,5 @@ public interface AdviceApi {
 
     @GET("/advice")
     Call<Advice> getAdvice();
-
 
 }

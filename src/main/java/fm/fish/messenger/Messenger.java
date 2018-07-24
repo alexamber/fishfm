@@ -7,13 +7,16 @@ import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.bots.AbsSender;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 public abstract class Messenger {
 
+    protected LocalDateTime lastTimeSent;
     private Logger LOG = LoggerFactory.getLogger(this.getClass());
     private AbsSender bot;
     private long chatId;
+
 
     public Messenger(AbsSender bot, long chatId) {
         this.bot = bot;
@@ -34,5 +37,23 @@ public abstract class Messenger {
                 e.printStackTrace();
             }
         }
+    }
+
+    protected boolean onceADay(LocalDateTime now, int afterDayHour, int afterHourMinute) {
+        boolean needToSendToday = null == lastTimeSent || !lastTimeSent.toLocalDate().equals(now.toLocalDate());
+        if (needToSendToday && now.getHour() >= afterDayHour && now.getMinute() >= afterHourMinute) {
+            lastTimeSent = now;
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean every(LocalDateTime now, Duration interval) {
+        boolean needToSendToday = null == lastTimeSent || Duration.between(lastTimeSent, now).compareTo(interval) > 0;
+        if (needToSendToday) {
+            lastTimeSent = now;
+            return true;
+        }
+        return false;
     }
 }

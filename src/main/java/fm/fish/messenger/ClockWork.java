@@ -13,10 +13,10 @@ import java.util.List;
 
 public class ClockWork {
 
-    private static final long MIN_TO_SLEEP = Duration.ofMinutes(1).toMillis();
-    private static final long MAX_TO_SLEEP = Duration.ofMinutes(2).toMillis();
     private static final Logger LOG = LoggerFactory.getLogger(ClockWork.class);
     private static final String ZONE_ID = "Europe/Kiev";
+    private static long minToSleep = Duration.ofMinutes(2).toMillis();
+    private static long maxToSleep = Duration.ofMinutes(3).toMillis();
     private static int startWorkingHour = 0;
     private static int endWorkingHour = 24;
     private List<Messenger> messengers = new ArrayList<>();
@@ -30,8 +30,14 @@ public class ClockWork {
     }
 
     public ClockWork hours(int startHour, int endHour) {
-        startWorkingHour = startHour;
-        endWorkingHour = endHour;
+        this.startWorkingHour = startHour;
+        this.endWorkingHour = endHour;
+        return this;
+    }
+
+    public ClockWork sleep(Duration minToSleep, Duration maxToSleep) {
+        this.minToSleep = minToSleep.toMillis();
+        this.maxToSleep = maxToSleep.toMillis();
         return this;
     }
 
@@ -41,11 +47,11 @@ public class ClockWork {
                 LOG.info("WakeUp!");
                 messengers.forEach(m -> {
                     LocalDateTime now = LocalDateTime.now(Clock.system(ZoneId.of(ZONE_ID)));
-                    if (now.getHour() >= startWorkingHour && now.getHour() <= endWorkingHour)
+                    if (now.getHour() >= startWorkingHour && now.getHour() < endWorkingHour)
                         m.wake(now);
                 });
                 try {
-                    Thread.sleep(RandomUtil.R.nextLong(MIN_TO_SLEEP, MAX_TO_SLEEP));
+                    Thread.sleep(RandomUtil.R.nextLong(minToSleep, maxToSleep));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

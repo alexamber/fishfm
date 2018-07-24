@@ -1,7 +1,7 @@
 package fm.fish.engine.rest.api;
 
 import fm.fish.engine.rest.AbstractApiClient;
-import fm.fish.pojo.openweather.catfact.CatFact;
+import fm.fish.pojo.catfact.CatFact;
 
 import static org.apache.http.HttpStatus.SC_OK;
 

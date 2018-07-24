@@ -32,4 +32,7 @@ public interface FishFmConfig extends Config {
 
     @Key("BOT_NAME")
     String botName();
+
+    @Key("COUB_TOKEN")
+    String coubToken();
 }

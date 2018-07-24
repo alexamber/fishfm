@@ -14,7 +14,6 @@ import java.util.stream.Stream;
 public class BonAppetitMessenger extends Messenger {
     private static final int DAY_HOUR_TO_SEND = 13;
     private static final List<String> BONAPPETITS = Phrases.get(FishFmConfig.I.bonappetit());
-    private LocalDateTime lastTimeSent;
 
     public BonAppetitMessenger(AbsSender bot, long chatId) {
         super(bot, chatId);
@@ -22,12 +21,7 @@ public class BonAppetitMessenger extends Messenger {
 
     @Override
     protected boolean shouldSend(LocalDateTime now) {
-        boolean needToSendToday = null == lastTimeSent || !lastTimeSent.toLocalDate().equals(now.toLocalDate());
-        if (needToSendToday && now.getHour() >= DAY_HOUR_TO_SEND) {
-            lastTimeSent = now;
-            return true;
-        }
-        return false;
+        return onceADay(now, DAY_HOUR_TO_SEND, 0);
     }
 
     @Override
@@ -45,7 +39,6 @@ public class BonAppetitMessenger extends Messenger {
         BACON("\uD83E\uDD53"),
         BOWL("\uD83C\uDF5C"),
         BURITTO("\uD83C\uDF2F");
-
 
         private String s;
 

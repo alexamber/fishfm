@@ -14,7 +14,6 @@ public class AdviceMessenger extends Messenger {
     private static final int DAY_HOUR_TO_SEND = 10;
     private static final int MINUTE_TO_SEND = 11;
     private static final List<String> ADVICES = Phrases.get(FishFmConfig.I.advicies());
-    private LocalDateTime lastTimeSent;
 
     public AdviceMessenger(AbsSender bot, long chatId) {
         super(bot, chatId);
@@ -22,12 +21,7 @@ public class AdviceMessenger extends Messenger {
 
     @Override
     protected boolean shouldSend(LocalDateTime now) {
-        boolean needToSendToday = null == lastTimeSent || !lastTimeSent.toLocalDate().equals(now.toLocalDate());
-        if (needToSendToday && now.getHour() >= DAY_HOUR_TO_SEND && now.getMinute() >= MINUTE_TO_SEND) {
-            lastTimeSent = now;
-            return true;
-        }
-        return false;
+        return onceADay(now, DAY_HOUR_TO_SEND, MINUTE_TO_SEND);
     }
 
     @Override

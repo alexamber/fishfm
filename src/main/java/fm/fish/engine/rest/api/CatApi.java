@@ -1,7 +1,7 @@
 package fm.fish.engine.rest.api;
 
 import fm.fish.engine.rest.ServiceFactory;
-import fm.fish.pojo.openweather.catfact.CatFact;
+import fm.fish.pojo.catfact.CatFact;
 import retrofit2.Call;
 import retrofit2.http.GET;
 
