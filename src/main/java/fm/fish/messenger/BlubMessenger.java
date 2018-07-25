@@ -18,7 +18,7 @@ public class BlubMessenger extends Messenger {
 
     @Override
     protected boolean shouldSend(LocalDateTime now) {
-        return Math.random() <= 0.02;
+        return probability(3);
     }
 
     @Override

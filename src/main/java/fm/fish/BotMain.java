@@ -20,15 +20,15 @@ public class BotMain {
         tapi.registerBot(bot);
 
         new ClockWork()
-                .sleep(ofMinutes(2), ofMinutes(5))
+                .sleep(ofMinutes(1), ofMinutes(3))
                 .hours(8, 21)
                 .register(new BlubMessenger(bot, CHAT_ID))
                 .register(new WeatherMessenger(bot, CHAT_ID, KYIV))
                 .register(new BonAppetitMessenger(bot, CHAT_ID))
                 .register(new CatFactMessenger(bot, CHAT_ID))
                 .register(new AdviceMessenger(bot, CHAT_ID))
-                .register(new CoubMessenger(HOT, bot, CHAT_ID, ofMinutes(193)))
-                .register(new CoubMessenger(TAGGED, bot, CHAT_ID, ofMinutes(133)))
+                .register(new CoubMessenger(HOT, bot, CHAT_ID, ofMinutes(123)))
+                .register(new CoubMessenger(TAGGED, bot, CHAT_ID, ofMinutes(155)))
                 .start();
     }
 

@@ -12,11 +12,10 @@ import java.time.LocalDateTime;
 
 public abstract class Messenger {
 
-    protected LocalDateTime lastTimeSent;
-    private Logger LOG = LoggerFactory.getLogger(this.getClass());
+    protected Logger LOG = LoggerFactory.getLogger(this.getClass());
+    private LocalDateTime lastTimeSent;
     private AbsSender bot;
     private long chatId;
-
 
     public Messenger(AbsSender bot, long chatId) {
         this.bot = bot;
@@ -55,5 +54,9 @@ public abstract class Messenger {
             return true;
         }
         return false;
+    }
+
+    protected boolean probability(float percentage) {
+        return Math.random() <= percentage / 100;
     }
 }
