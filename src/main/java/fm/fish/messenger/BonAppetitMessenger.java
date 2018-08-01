@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class BonAppetitMessenger extends Messenger {
+public class BonAppetitMessenger extends AbstractMessenger {
     private static final int DAY_HOUR_TO_SEND = 13;
     private static final List<String> BONAPPETITS = Phrases.get(FishFmConfig.I.bonappetit());
 

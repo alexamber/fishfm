@@ -19,12 +19,12 @@ public class ClockWork {
     private long maxToSleep = Duration.ofMinutes(3).toMillis();
     private int startWorkingHour = 0;
     private int endWorkingHour = 24;
-    private List<Messenger> messengers = new ArrayList<>();
+    private List<AbstractMessenger> messengers = new ArrayList<>();
 
     public ClockWork() {
     }
 
-    public ClockWork register(Messenger msgr) {
+    public ClockWork register(AbstractMessenger msgr) {
         messengers.add(msgr);
         return this;
     }

@@ -29,6 +29,7 @@ public class BotMain {
                 .register(new AdviceMessenger(bot, CHAT_ID))
                 .register(new CoubMessenger(HOT, bot, CHAT_ID, ofMinutes(123)))
                 .register(new CoubMessenger(TAGGED, bot, CHAT_ID, ofMinutes(155)))
+                .register(new WeekDayMessenger(bot, CHAT_ID))
                 .start();
     }
 

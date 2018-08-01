@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AdviceMessenger extends Messenger {
+public class AdviceMessenger extends AbstractMessenger {
 
     private static final int DAY_HOUR_TO_SEND = 10;
     private static final int MINUTE_TO_SEND = 11;

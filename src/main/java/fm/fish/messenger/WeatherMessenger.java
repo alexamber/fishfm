@@ -12,12 +12,12 @@ import fm.fish.util.StringUtils;
 import org.telegram.telegrambots.bots.AbsSender;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class WeatherMessenger extends Messenger {
+public class WeatherMessenger extends AbstractMessenger {
 
     private static final String WEATHER_MSG_CORE_TEMAPLATE = "NOW: \uD83C\uDF21%sC | \uD83D\uDCA7%s%% humidity | \uD83C\uDF2C%s";
     private static final List<String> WEATHER_MSG_STARTER = Phrases.get(FishFmConfig.I.weatherStarter());
@@ -38,7 +38,6 @@ public class WeatherMessenger extends Messenger {
     public String msgSupplier() {
         return getWeather(city);
     }
-
 
     private String getWeather(City city) {
         WeatherToday weather = WeatherApiClient.getWeatherToday(city);
@@ -66,7 +65,7 @@ public class WeatherMessenger extends Messenger {
     }
 
     private String getWeatherForecaster(List<WeatherIcon> forecast) {
-        if (new ArrayList(Arrays.asList(WeatherIcon.RAIN, WeatherIcon.THUNDER, WeatherIcon.SUN_RAIN)).retainAll(forecast)) {
+        if (Stream.of(WeatherIcon.RAIN, WeatherIcon.THUNDER, WeatherIcon.SUN_RAIN).anyMatch(forecast::contains)) {
             return "Sky may cry throughout the day, mb ☂☂☂?";
         } else {
             return "Lucky \uD83C\uDF40\uD83E\uDD1E\uD83C\uDF40 meaty friends, it shouldn't get any worth.";

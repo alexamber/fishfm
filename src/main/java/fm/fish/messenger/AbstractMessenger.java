@@ -5,19 +5,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.bots.AbsSender;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-public abstract class Messenger {
+public abstract class AbstractMessenger {
 
     protected Logger LOG = LoggerFactory.getLogger(this.getClass());
     private LocalDateTime lastTimeSent;
     private AbsSender bot;
     private long chatId;
 
-    public Messenger(AbsSender bot, long chatId) {
+    public AbstractMessenger(AbsSender bot, long chatId) {
         this.bot = bot;
         this.chatId = chatId;
     }
@@ -32,8 +31,8 @@ public abstract class Messenger {
                 String text = FishSpeaker.get() + msgSupplier();
                 LOG.info(text);
                 bot.execute(new SendMessage().setChatId(chatId).setText(text));
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                LOG.error("Error occurred on wake-up:", e);
             }
         }
     }

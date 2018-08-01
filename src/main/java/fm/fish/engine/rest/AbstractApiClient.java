@@ -1,6 +1,7 @@
 package fm.fish.engine.rest;
 
 import retrofit2.Call;
+import retrofit2.HttpException;
 import retrofit2.Response;
 
 import java.io.IOException;
@@ -14,7 +15,9 @@ public class AbstractApiClient {
         } catch (IOException e) {
             throw new RuntimeException(String.format("Failed to send request: %s", getCallInfo(call)), e);
         }
-        verifyResponseCode(call, response, expectedCode);
+        if (expectedCode != response.code()) {
+            throw new HttpException(response);
+        }
         return response;
     }
 
@@ -22,10 +25,4 @@ public class AbstractApiClient {
         return call.request().method() + " " + call.request().url();
     }
 
-    private static void verifyResponseCode(Call call, Response response, int expectedCode) {
-        if (expectedCode != response.code()) {
-            throw new RuntimeException(String.format("Request: %s%nExpected: %d. Got: %d.%n%s",
-                    getCallInfo(call), expectedCode, response.code(), response));
-        }
-    }
 }
