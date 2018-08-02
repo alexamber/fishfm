@@ -11,7 +11,6 @@ import static fm.fish.domain.City.KYIV;
 import static fm.fish.messenger.CoubMessenger.CoubMessengerType.HOT;
 import static fm.fish.messenger.CoubMessenger.CoubMessengerType.TAGGED;
 import static java.time.Duration.ofMinutes;
-import static java.time.Duration.ofSeconds;
 
 public class BotMain {
 
@@ -24,9 +23,7 @@ public class BotMain {
 
         new ClockWork()
                 .sleep(ofMinutes(1), ofMinutes(3))
-                .sleep(ofSeconds(1), ofSeconds(3))
                 .hours(8, 21)
-                .hours(8, 24)
                 .register(new BlubMessenger(bot, CHAT_ID))
                 .register(new WeatherMessenger(bot, CHAT_ID, KYIV))
                 .register(new BonAppetitMessenger(bot, CHAT_ID))
