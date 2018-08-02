@@ -11,14 +11,14 @@ import static org.apache.http.HttpStatus.SC_OK;
 public class WeatherApiClient extends AbstractApiClient {
 
     private static final String METRIC = "metric";
-    private static final String TOKEN = FishFmConfig.I.openWeatherApiKey();
+    private static final String API_KEY = FishFmConfig.I.openWeatherApiKey();
 
     public static WeatherToday getWeatherToday(final City city) {
-        return send(WeatherApi.get().getWeatherToday(city.get(), METRIC, TOKEN), SC_OK).body();
+        return send(WeatherApi.get().getWeatherToday(city.get(), METRIC, API_KEY), SC_OK).body();
     }
 
     public static WeatherForecast getWeatherForecast(final City city) {
 
-        return send(WeatherApi.get().getWeatherForecast(city.get(), METRIC, TOKEN), SC_OK).body();
+        return send(WeatherApi.get().getWeatherForecast(city.get(), METRIC, API_KEY), SC_OK).body();
     }
 }

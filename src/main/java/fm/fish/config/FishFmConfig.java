@@ -35,4 +35,7 @@ public interface FishFmConfig extends Config {
 
     @Key("COUB_TOKEN")
     String coubToken();
+
+    @Key("TMDB_KEY")
+    String tmdbApiKey();
 }

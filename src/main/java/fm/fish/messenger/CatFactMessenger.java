@@ -19,7 +19,7 @@ public class CatFactMessenger extends AbstractMessenger {
 
     @Override
     protected boolean shouldSend(LocalDateTime now) {
-        return probability(3);
+        return probability(2);
     }
 
     @Override

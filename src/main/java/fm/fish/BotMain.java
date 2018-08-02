@@ -2,6 +2,8 @@ package fm.fish;
 
 import fm.fish.config.FishFmConfig;
 import fm.fish.messenger.*;
+import fm.fish.messenger.movie.NowPlayingMovieMessenger;
+import fm.fish.messenger.movie.TopRatedMovieMessenger;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
@@ -9,6 +11,7 @@ import static fm.fish.domain.City.KYIV;
 import static fm.fish.messenger.CoubMessenger.CoubMessengerType.HOT;
 import static fm.fish.messenger.CoubMessenger.CoubMessengerType.TAGGED;
 import static java.time.Duration.ofMinutes;
+import static java.time.Duration.ofSeconds;
 
 public class BotMain {
 
@@ -21,15 +24,19 @@ public class BotMain {
 
         new ClockWork()
                 .sleep(ofMinutes(1), ofMinutes(3))
+                .sleep(ofSeconds(1), ofSeconds(3))
                 .hours(8, 21)
+                .hours(8, 24)
                 .register(new BlubMessenger(bot, CHAT_ID))
                 .register(new WeatherMessenger(bot, CHAT_ID, KYIV))
                 .register(new BonAppetitMessenger(bot, CHAT_ID))
                 .register(new CatFactMessenger(bot, CHAT_ID))
                 .register(new AdviceMessenger(bot, CHAT_ID))
-                .register(new CoubMessenger(HOT, bot, CHAT_ID, ofMinutes(123)))
-                .register(new CoubMessenger(TAGGED, bot, CHAT_ID, ofMinutes(155)))
+                .register(new CoubMessenger(HOT, bot, CHAT_ID, ofMinutes(90)))
+                .register(new CoubMessenger(TAGGED, bot, CHAT_ID, ofMinutes(70)))
                 .register(new WeekDayMessenger(bot, CHAT_ID))
+                .register(new NowPlayingMovieMessenger(bot, CHAT_ID))
+                .register(new TopRatedMovieMessenger(bot, CHAT_ID))
                 .start();
     }
 
