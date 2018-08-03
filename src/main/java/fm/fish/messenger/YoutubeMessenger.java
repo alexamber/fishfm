@@ -70,7 +70,6 @@ public class YoutubeMessenger extends AbstractMessenger {
     private List<Items> getYoutubeItems() {
 
         switch (duration) {
-
             case SHORT:
                 return YoutubeApiClient.getVideoByName("short", RandomUtil.dice(getArtistsAndTracks())).getItems();
             case MEDIUM:
