@@ -38,4 +38,10 @@ public interface FishFmConfig extends Config {
 
     @Key("TMDB_KEY")
     String tmdbApiKey();
+
+    @Key("LAST_FM")
+    String lastFmApiKey(); // need to add into fishfm.properties
+
+    @Key("YOUTUBE_KEY")
+    String youtubeApiKey(); // need to add into fishfm.properties
 }
