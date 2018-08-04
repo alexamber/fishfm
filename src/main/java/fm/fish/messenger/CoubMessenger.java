@@ -1,5 +1,6 @@
 package fm.fish.messenger;
 
+import fm.fish.config.FishFmConfig;
 import fm.fish.engine.rest.api.CoubApiClient;
 import fm.fish.pojo.coub.CoubsItem;
 import fm.fish.util.CacheUtil;
@@ -9,15 +10,14 @@ import org.telegram.telegrambots.bots.AbsSender;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class CoubMessenger extends AbstractMessenger {
-    public static final String COUB_URL = "https://coub.com/view/";
+    public static final String COUB_URL = FishFmConfig.I.coubVideoUrl();
     public static final String EMOJIS = StringUtils.spawn("\uD83E\uDD18", 3);
-    public static final List<String> TAGS = Arrays.asList("funnycat", "cat", "dog", "animal", "parrot");
+    public static final List<String> TAGS = FishFmConfig.I.coubTags();
     private final CoubMessengerType type;
     private final Duration interval;
     private final LinkedHashMap<String, String> cachedCoubs = CacheUtil.createCache(20);
@@ -40,7 +40,7 @@ public class CoubMessenger extends AbstractMessenger {
 
     private String getUniqueCoubPermalink() {
         List<String> permalinks = getCoubs().stream()
-                .map(c -> c.getPermalink())
+                .map(CoubsItem::getPermalink)
                 .filter(p -> !cachedCoubs.containsKey(p))
                 .collect(Collectors.toList());
         String permalink = RandomUtil.dice(permalinks);

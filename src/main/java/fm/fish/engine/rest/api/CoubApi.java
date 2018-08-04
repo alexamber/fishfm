@@ -1,5 +1,6 @@
 package fm.fish.engine.rest.api;
 
+import fm.fish.config.FishFmConfig;
 import fm.fish.engine.rest.ServiceFactory;
 import fm.fish.pojo.coub.Timeline;
 import retrofit2.Call;
@@ -10,7 +11,7 @@ import retrofit2.http.Query;
 public interface CoubApi {
 
     ThreadLocal<CoubApi> INSTANCE = ThreadLocal.withInitial(() ->
-            ServiceFactory.createService(CoubApi.class, System.getProperty("coub.host", "http://coub.com/")));
+            ServiceFactory.createService(CoubApi.class, FishFmConfig.I.coubHost()));
 
     static CoubApi get() {
         return INSTANCE.get();

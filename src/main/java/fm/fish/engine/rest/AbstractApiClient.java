@@ -17,7 +17,7 @@ public class AbstractApiClient {
                 return send(call.clone(), expectedCode);
             } catch (HttpException e) {
                 ex = e;
-                SleepUtil.sleep(Duration.ofSeconds(20));
+                SleepUtil.sleep(Duration.ofSeconds(4));
             }
         }
         throw new RuntimeException(String.format("Failed to send request: %s", getCallInfo(call)), ex);

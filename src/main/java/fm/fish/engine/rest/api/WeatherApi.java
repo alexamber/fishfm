@@ -1,5 +1,6 @@
 package fm.fish.engine.rest.api;
 
+import fm.fish.config.FishFmConfig;
 import fm.fish.engine.rest.ServiceFactory;
 import fm.fish.pojo.openweather.current.WeatherToday;
 import fm.fish.pojo.openweather.forecast.WeatherForecast;
@@ -10,7 +11,7 @@ import retrofit2.http.Query;
 public interface WeatherApi {
 
     ThreadLocal<WeatherApi> INSTANCE = ThreadLocal.withInitial(() ->
-            ServiceFactory.createService(WeatherApi.class, System.getProperty("openweather.host", "http://api.openweathermap.org/")));
+            ServiceFactory.createService(WeatherApi.class, FishFmConfig.I.openWeatherHost()));
 
     static WeatherApi get() {
         return INSTANCE.get();

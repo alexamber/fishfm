@@ -30,7 +30,7 @@ public abstract class AbstractMessenger {
             try {
                 String text = FishSpeaker.get() + msgSupplier();
                 LOG.info(text);
-                bot.execute(new SendMessage().setChatId(chatId).setText(text));
+                bot.execute(new SendMessage().enableMarkdown(true).setChatId(chatId).setText(text));
             } catch (Exception e) {
                 LOG.error("Error occurred on wake-up:", e);
             }

@@ -1,5 +1,6 @@
 package fm.fish.engine.rest.api;
 
+import fm.fish.config.FishFmConfig;
 import fm.fish.engine.rest.ServiceFactory;
 import fm.fish.pojo.tmdb.movie.nowplaying.NowPlaying;
 import fm.fish.pojo.tmdb.movie.single.Movie;
@@ -12,7 +13,7 @@ import retrofit2.http.Query;
 public interface TmdbApi {
 
     ThreadLocal<TmdbApi> INSTANCE = ThreadLocal.withInitial(() ->
-            ServiceFactory.createService(TmdbApi.class, System.getProperty("tmdb.host", "https://api.themoviedb.org/")));
+            ServiceFactory.createService(TmdbApi.class, FishFmConfig.I.tmdbHost()));
 
     static TmdbApi get() {
         return INSTANCE.get();
