@@ -22,8 +22,7 @@ public interface YoutubeApi {
             @Query("key") String apiKey,
             @Query("playlistId") String playlistId,
             @Query("part") Part part,
-            @Query("maxResults") int maxResults,
-            @Query("orderBy") Order order
+            @Query("maxResults") int maxResults
     );
 
     enum VideoDuration {

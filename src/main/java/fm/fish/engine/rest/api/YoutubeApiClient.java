@@ -4,7 +4,6 @@ import fm.fish.config.FishFmConfig;
 import fm.fish.engine.rest.AbstractApiClient;
 import fm.fish.pojo.youtube.playlistitems.PlaylistItems;
 
-import static fm.fish.engine.rest.api.YoutubeApi.Order;
 import static fm.fish.engine.rest.api.YoutubeApi.Part;
 import static org.apache.http.HttpStatus.SC_OK;
 
@@ -15,6 +14,6 @@ public class YoutubeApiClient extends AbstractApiClient {
 
     public static PlaylistItems getPlaylist() {
         return send(YoutubeApi.get().getPlaylistItems(
-                API_KEY, FISH_FM_PLAYLIST_ID, Part.SNIPPET, 20, Order.DATE), SC_OK).body();
+                API_KEY, FISH_FM_PLAYLIST_ID, Part.SNIPPET, 20), SC_OK).body();
     }
 }
