@@ -32,8 +32,7 @@ public class FishFmYouTubePlaylistUpdatesMessenger extends AbstractMessenger {
             return false;
         }
         getUpdates();
-        return !musicUpdates.isEmpty() && updateFishen();
-
+        return !musicUpdates.isEmpty() && updateFishen() && probability(20);
     }
 
     @Override
