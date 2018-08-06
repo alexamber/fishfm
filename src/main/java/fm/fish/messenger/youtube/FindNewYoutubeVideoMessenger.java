@@ -1,7 +1,7 @@
 package fm.fish.messenger.youtube;
 
-import fm.fish.engine.rest.api.LastFMApi;
 import fm.fish.engine.rest.api.LastFMApiClient;
+import fm.fish.engine.rest.api.YoutubeApi;
 import fm.fish.engine.rest.api.YoutubeApiClient;
 import fm.fish.messenger.AbstractMessenger;
 import fm.fish.pojo.lastfm.topArtist.Artist;
@@ -24,22 +24,21 @@ import java.util.stream.Collectors;
 public class FindNewYoutubeVideoMessenger extends AbstractMessenger {
 
     public static final String YOUTUBE_URL = "https://www.youtube.com/watch?v=";
+    public static final String EMOJIS = StringUtils.spawn("\uD83D\uDC3C", 3);
     public static List<String> GENRES = Arrays.asList("thrash rock", "alternative rock", "progressive rock", "hard rock",
             "classic rock", "rock", "progressive rock", "70s", "heavy metal",
-            "thrash metal", "metal", "metalcore", "death metal",
+            "thrash metal", "metal", "metalcore",
             "heavy metal", "hardcore", "80s", "blues", "psychedelic",
             "psychedelic rock", "guitar", "jazz", "acoustic", "folk",
             "electronic", "indie", "pop", "chill", "punk", "indie rock",
             "Hip-Hop", "instrumental", "black metal", "soul", "chillout",
-            "Classical", "industrial", "punk rock", "japanese","power metal",
+            "Classical", "industrial", "punk rock", "japanese", "power metal",
             "post-rock", "german", "funk", "hip hop", "russian", "synthwave");
     private final Duration interval;
-    private final YoutubeDuration duration;
+    private final YoutubeApi.VideoDuration duration;
     private final LinkedHashMap<String, String> cachedVideos = CacheUtil.createCache(20);
 
-    public static final String EMOJIS = StringUtils.spawn("\uD83D\uDC3C", 3);
-
-    public FindNewYoutubeVideoMessenger(AbsSender bot, long chatId, Duration interval, YoutubeDuration duration) {
+    public FindNewYoutubeVideoMessenger(AbsSender bot, long chatId, Duration interval, YoutubeApi.VideoDuration duration) {
         super(bot, chatId);
         this.interval = interval;
         this.duration = duration;
@@ -70,40 +69,33 @@ public class FindNewYoutubeVideoMessenger extends AbstractMessenger {
 
     private List<Items> getYoutubeItems() {
 
+        List<String> artistsAndTracks = getArtistsAndTracks();
         switch (duration) {
             case SHORT:
-                return YoutubeApiClient.getVideoByName("short", RandomUtil.dice(getArtistsAndTracks())).getItems();
+                return YoutubeApiClient.getVideoByName("short", RandomUtil.dice(artistsAndTracks)).getItems();
             case MEDIUM:
-                return YoutubeApiClient.getVideoByName("medium", RandomUtil.dice(getArtistsAndTracks())).getItems();
+                return YoutubeApiClient.getVideoByName("medium", RandomUtil.dice(artistsAndTracks)).getItems();
             default:
                 throw new RuntimeException("Youtube messenger duration is not supported");
         }
 
     }
 
-    public enum YoutubeDuration {
-        SHORT, MEDIUM
-    }
-
     public List<String> getArtistsAndTracks() {
 
-        Collections.shuffle(GENRES) ;
-        List<String> lessGenres = GENRES.subList(0, 9);
+        Collections.shuffle(GENRES);
+        String genre = GENRES.get(0);
 
-        List<Artist> artists = new ArrayList<>();
-
-        for (String genre: lessGenres) {
-            artists.addAll(LastFMApiClient.getArtistByTag(genre).getTopartists().getArtist());
-        }
+        List<Artist> artists = LastFMApiClient.getArtistByTag(genre).getTopartists().getArtist();
 
         List<Track> tracks = new ArrayList<>();
 
-        for(Artist artist : artists) {
+        for (Artist artist : artists) {
             tracks.addAll(LastFMApiClient.getTopTracksByArtist(artist.getName()).getTopTracks().getTrackList());
         }
 
         return tracks.stream()
                 .map(c -> c.getTrackArtist().getName() + " " + c.getName())
                 .collect(Collectors.toList());
-            }
+    }
 }
