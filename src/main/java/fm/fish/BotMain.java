@@ -1,14 +1,7 @@
 package fm.fish;
 
 import fm.fish.config.FishFmConfig;
-import fm.fish.messenger.AdviceMessenger;
-import fm.fish.messenger.BlubMessenger;
-import fm.fish.messenger.BonAppetitMessenger;
-import fm.fish.messenger.CatFactMessenger;
-import fm.fish.messenger.ClockWork;
-import fm.fish.messenger.CoubMessenger;
-import fm.fish.messenger.WeatherMessenger;
-import fm.fish.messenger.WeekDayMessenger;
+import fm.fish.messenger.*;
 import fm.fish.messenger.movie.NowPlayingMovieMessenger;
 import fm.fish.messenger.movie.TopRatedMovieMessenger;
 import fm.fish.messenger.youtube.FindNewYoutubeVideoMessenger;
@@ -41,11 +34,11 @@ public class BotMain {
                 .register(new AdviceMessenger(bot, CHAT_ID))
                 .register(new CoubMessenger(HOT, bot, CHAT_ID, ofMinutes(90)))
                 .register(new CoubMessenger(TAGGED, bot, CHAT_ID, ofMinutes(70)))
-                .register(new FindNewYoutubeVideoMessenger(bot, CHAT_ID, ofMinutes(90), ANY))
                 .register(new WeekDayMessenger(bot, CHAT_ID))
                 .register(new NowPlayingMovieMessenger(bot, CHAT_ID))
                 .register(new TopRatedMovieMessenger(bot, CHAT_ID))
                 .register(new FishFmYouTubePlaylistUpdatesMessenger(bot, CHAT_ID))
+                .register(new FindNewYoutubeVideoMessenger(bot, CHAT_ID, ofMinutes(90), ANY))
                 .start();
     }
 
