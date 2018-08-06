@@ -71,7 +71,7 @@ public class FindNewYoutubeVideoMessenger extends AbstractMessenger {
         String genre = RandomUtil.dice(GENRES);
         List<Artist> artists;
 
-        if (!cashedGenreArtists.containsKey(genre) || cashedGenreArtists.get(genre).isEmpty()) {
+        if (!cashedGenreArtists.containsKey(genre)) {
             artists = LastFMApiClient.getArtistByTag(genre).getTopartists().getArtist();
             cashedGenreArtists.put(genre, artists);
         } else {
@@ -81,7 +81,7 @@ public class FindNewYoutubeVideoMessenger extends AbstractMessenger {
         Artist artist = RandomUtil.dice(artists);
         List<Track> tracks;
 
-        if (!cashedArtistTrack.containsKey(genre) || cashedArtistTrack.get(artist.getName()).isEmpty()) {
+        if (!cashedArtistTrack.containsKey(genre)) {
             tracks = LastFMApiClient.getTopTracksByArtist(artist.getName()).getTopTracks().getTrackList();
             cashedArtistTrack.put(artist.getName(), tracks);
         } else {
