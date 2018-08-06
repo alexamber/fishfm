@@ -6,8 +6,10 @@ import fm.fish.pojo.youtube.YoutubeResponse;
 import fm.fish.pojo.youtube.playlistitems.PlaylistItems;
 
 import static fm.fish.engine.rest.api.YoutubeApi.Part;
+import static fm.fish.engine.rest.api.YoutubeApi.Part.ID;
+import static fm.fish.engine.rest.api.YoutubeApi.Type.VIDEO;
+import static fm.fish.engine.rest.api.YoutubeApi.VideoDuration;
 import static org.apache.http.HttpStatus.SC_OK;
-
 
 public class YoutubeApiClient extends AbstractApiClient {
 
@@ -20,9 +22,8 @@ public class YoutubeApiClient extends AbstractApiClient {
     }
 
 
-    public static YoutubeResponse getVideoByName(final String duration, final String name) {
-        return send(YoutubeApi.get().searchVideoByName(API_KEY, "id", duration, "video", 1, "US", name), SC_OK).body();
+    public static YoutubeResponse getVideoByName(final VideoDuration duration, final String name) {
+        return send(YoutubeApi.get().searchVideoByName(API_KEY, ID, duration, VIDEO, 1, "US", name), SC_OK).body();
     }
-
 
 }

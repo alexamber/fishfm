@@ -1,5 +1,6 @@
 package fm.fish.engine.rest.api;
 
+import fm.fish.config.FishFmConfig;
 import fm.fish.engine.rest.ServiceFactory;
 import fm.fish.pojo.lastfm.topArtist.TopArtistResponse;
 import fm.fish.pojo.lastfm.topArtistTracks.TopArtistTrackResponse;
@@ -10,7 +11,7 @@ import retrofit2.http.Query;
 public interface LastFMApi {
 
     ThreadLocal<LastFMApi> INSTANCE = ThreadLocal.withInitial(() ->
-            ServiceFactory.createService(LastFMApi.class, System.getProperty("lastfm.host", "http://ws.audioscrobbler.com/")));
+            ServiceFactory.createService(LastFMApi.class, FishFmConfig.I.lastFmHost()));
 
     static LastFMApi get() {
         return INSTANCE.get();
@@ -29,6 +30,5 @@ public interface LastFMApi {
             @Query("format") String format,
             @Query("artist") String artist
     );
-
 
 }

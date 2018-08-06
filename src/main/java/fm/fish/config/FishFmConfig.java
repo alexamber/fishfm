@@ -83,8 +83,13 @@ public interface FishFmConfig extends Config {
     String tmdbApiKey();
 
     @Key("LAST_FM")
-    String lastFmApiKey(); // need to add into fishfm.properties
+    String lastFmApiKey();
 
-    @Key("YOUTUBE_KEY")
-    String youtubeApiKey(); // need to add into fishfm.properties
+    @Key("LAST_FM_HOST")
+    @DefaultValue("http://ws.audioscrobbler.com/")
+    String lastFmHost();
+
+    @Key("GENRES")
+    List<String> genres();
+
 }

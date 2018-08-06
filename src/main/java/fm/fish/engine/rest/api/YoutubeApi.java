@@ -21,11 +21,10 @@ public interface YoutubeApi {
     @GET("/search")
     Call<YoutubeResponse> searchVideoByName(
             @Query("key") String api_key,
-            @Query("part") String part,
-            @Query("videoDuration") String videoDuration,
-            @Query("type") String type,
+            @Query("part") Part part,
+            @Query("videoDuration") VideoDuration videoDuration,
+            @Query("type") Type type,
             @Query("maxResults") int maxResults,
-            //@Query("order") String order,
             @Query("regionCode") String regionCode,
             @Query("q") String name
     );
@@ -66,7 +65,7 @@ public interface YoutubeApi {
     }
 
     enum Part {
-        SNIPPET, CONTENT_DETAILS;
+        SNIPPET, CONTENT_DETAILS, ID;
 
         @Override
         public String toString() {
