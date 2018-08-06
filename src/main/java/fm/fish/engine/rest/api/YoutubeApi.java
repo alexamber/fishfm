@@ -3,6 +3,7 @@ package fm.fish.engine.rest.api;
 import com.google.common.base.CaseFormat;
 import fm.fish.config.FishFmConfig;
 import fm.fish.engine.rest.ServiceFactory;
+import fm.fish.pojo.youtube.YoutubeResponse;
 import fm.fish.pojo.youtube.playlistitems.PlaylistItems;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -16,6 +17,17 @@ public interface YoutubeApi {
     static YoutubeApi get() {
         return INSTANCE.get();
     }
+
+    @GET("/youtube/v3/search")
+    Call<YoutubeResponse> searchVideoByName(
+            @Query("key") String api_key,
+            @Query("part") Part part,
+            @Query("videoDuration") VideoDuration videoDuration,
+            @Query("type") Type type,
+            @Query("maxResults") int maxResults,
+            @Query("regionCode") String regionCode,
+            @Query("q") String name
+    );
 
     @GET("/youtube/v3/playlistItems")
     Call<PlaylistItems> getPlaylistItems(
@@ -53,7 +65,7 @@ public interface YoutubeApi {
     }
 
     enum Part {
-        SNIPPET, CONTENT_DETAILS;
+        SNIPPET, CONTENT_DETAILS, ID;
 
         @Override
         public String toString() {
