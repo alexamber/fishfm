@@ -6,8 +6,8 @@ import fm.fish.engine.rest.api.YoutubeApiClient;
 import fm.fish.messenger.AbstractMessenger;
 import fm.fish.pojo.lastfm.topArtist.Artist;
 import fm.fish.pojo.lastfm.topArtistTracks.Track;
-import fm.fish.pojo.youtube.Items;
 import fm.fish.util.CacheUtil;
+import fm.fish.util.Phrases;
 import fm.fish.util.RandomUtil;
 import fm.fish.util.StringUtils;
 import org.telegram.telegrambots.bots.AbsSender;
@@ -23,14 +23,15 @@ import static fm.fish.engine.rest.api.YoutubeApi.VideoDuration;
 
 public class FindNewYoutubeVideoMessenger extends AbstractMessenger {
 
-    private static final String YOUTUBE_URL = FishFmConfig.I.youTubeVideoPage();
-    private static final String EMOJIS = StringUtils.spawn("\uD83D\uDC3C", 3);
-    private static List<String> GENRES = FishFmConfig.I.genres();
+    private static final String YOUTUBE_VIDEO_PAGE = FishFmConfig.I.youTubeVideoPage();
+    private static final String PANDA_TUBE =
+            StringUtils.spawn("\uD83D\uDC3C", 3) + "PANDA TUBE" + StringUtils.spawn("\uD83D\uDC3C", 3);
+    private static List<String> GENRES = Phrases.get(FishFmConfig.I.genresFile());
     private final Duration interval;
     private final VideoDuration duration;
     private final LinkedHashMap<String, String> cachedTracks = CacheUtil.createCache(20);
-    private final HashMap<String, List<Track>> cashedArtistTrack = new HashMap<>();
-    private final HashMap<String, List<Artist>> cashedGenreArtists = new HashMap<>();
+    private final HashMap<String, List<Track>> cachedArtistTrack = new HashMap<>();
+    private final HashMap<String, List<Artist>> cachedGenreArtists = new HashMap<>();
 
     public FindNewYoutubeVideoMessenger(AbsSender bot, long chatId, Duration interval, VideoDuration duration) {
         super(bot, chatId);
@@ -45,52 +46,29 @@ public class FindNewYoutubeVideoMessenger extends AbstractMessenger {
 
     @Override
     public String msgSupplier() {
-        return EMOJIS + "PANDA_TUBE" + EMOJIS + "\n" + YOUTUBE_URL + getUniqueYoutubeVideoIds();
+        return String.join("\n", PANDA_TUBE, YOUTUBE_VIDEO_PAGE + getYoutubeVideoId());
     }
 
 
-    private String getUniqueYoutubeVideoIds() {
-        return getYoutubeItem().stream()
-                .map(c -> c.getId().getVideoId())
-                .findFirst().get();
-    }
-
-
-    private List<Items> getYoutubeItem() {
+    private String getYoutubeVideoId() {
         List<String> artistsAndTracks = getArtistsAndTracks().stream()
                 .filter(c -> !cachedTracks.containsKey(c))
                 .collect(Collectors.toList());
         String artistTrack = RandomUtil.dice(artistsAndTracks);
         cachedTracks.put(artistTrack, artistTrack);
-        return YoutubeApiClient.getVideoByName(duration, artistTrack).getItems();
+        return YoutubeApiClient.getVideoByName(duration, artistTrack).getItems().get(0).getId().getVideoId();
 
     }
 
     private List<String> getArtistsAndTracks() {
-
         String genre = RandomUtil.dice(GENRES);
-        List<Artist> artists;
-
-        if (!cashedGenreArtists.containsKey(genre)) {
-            artists = LastFMApiClient.getArtistByTag(genre).getTopartists().getArtist();
-            cashedGenreArtists.put(genre, artists);
-        } else {
-            artists = cashedGenreArtists.get(genre);
-        }
-
+        List<Artist> artists = cachedGenreArtists.computeIfAbsent(genre,
+                v -> LastFMApiClient.getArtistByTag(genre).getTopartists().getArtist());
         Artist artist = RandomUtil.dice(artists);
-        List<Track> tracks;
-
-        if (!cashedArtistTrack.containsKey(genre)) {
-            tracks = LastFMApiClient.getTopTracksByArtist(artist.getName()).getTopTracks().getTrackList();
-            cashedArtistTrack.put(artist.getName(), tracks);
-        } else {
-            tracks = cashedArtistTrack.get(artist.getName());
-        }
+        List<Track> tracks = cachedArtistTrack.computeIfAbsent(artist.getName(),
+                v -> LastFMApiClient.getTopTracksByArtist(artist.getName()).getTopTracks().getTrackList());
         return tracks.stream()
                 .map(c -> c.getTrackArtist().getName() + " " + c.getName())
                 .collect(Collectors.toList());
     }
-
-
 }

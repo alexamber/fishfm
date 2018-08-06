@@ -18,7 +18,7 @@ public interface YoutubeApi {
         return INSTANCE.get();
     }
 
-    @GET("/search")
+    @GET("/youtube/v3/search")
     Call<YoutubeResponse> searchVideoByName(
             @Query("key") String api_key,
             @Query("part") Part part,
