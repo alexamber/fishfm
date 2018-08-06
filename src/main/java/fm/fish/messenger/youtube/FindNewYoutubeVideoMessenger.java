@@ -1,8 +1,9 @@
-package fm.fish.messenger;
+package fm.fish.messenger.youtube;
 
 import fm.fish.engine.rest.api.LastFMApi;
 import fm.fish.engine.rest.api.LastFMApiClient;
 import fm.fish.engine.rest.api.YoutubeApiClient;
+import fm.fish.messenger.AbstractMessenger;
 import fm.fish.pojo.lastfm.topArtist.Artist;
 import fm.fish.pojo.lastfm.topArtistTracks.Track;
 import fm.fish.pojo.youtube.Items;
@@ -20,7 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class YoutubeMessenger extends AbstractMessenger {
+public class FindNewYoutubeVideoMessenger extends AbstractMessenger {
 
     public static final String YOUTUBE_URL = "https://www.youtube.com/watch?v=";
     public static List<String> GENRES = Arrays.asList("thrash rock", "alternative rock", "progressive rock", "hard rock",
@@ -38,7 +39,7 @@ public class YoutubeMessenger extends AbstractMessenger {
 
     public static final String EMOJIS = StringUtils.spawn("\uD83D\uDC3C", 3);
 
-    public YoutubeMessenger(AbsSender bot, long chatId, Duration interval,YoutubeDuration duration) {
+    public FindNewYoutubeVideoMessenger(AbsSender bot, long chatId, Duration interval, YoutubeDuration duration) {
         super(bot, chatId);
         this.interval = interval;
         this.duration = duration;

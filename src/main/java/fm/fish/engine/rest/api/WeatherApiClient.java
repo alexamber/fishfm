@@ -18,7 +18,6 @@ public class WeatherApiClient extends AbstractApiClient {
     }
 
     public static WeatherForecast getWeatherForecast(final City city) {
-
         return send(WeatherApi.get().getWeatherForecast(city.get(), METRIC, API_KEY), SC_OK).body();
     }
 }

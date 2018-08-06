@@ -13,7 +13,7 @@ public class AdviceMessenger extends AbstractMessenger {
 
     private static final int DAY_HOUR_TO_SEND = 10;
     private static final int MINUTE_TO_SEND = 11;
-    private static final List<String> ADVICES = Phrases.get(FishFmConfig.I.advicies());
+    private static final List<String> ADVICIES = Phrases.get(FishFmConfig.I.advicies());
 
     public AdviceMessenger(AbsSender bot, long chatId) {
         super(bot, chatId);
@@ -26,7 +26,7 @@ public class AdviceMessenger extends AbstractMessenger {
 
     @Override
     public String msgSupplier() {
-        String advices = ADVICES.stream()
+        String advices = ADVICIES.stream()
                 .map(a -> a + ": " + AdviceApiClient.getAdvice().getSlip().getAdvice())
                 .collect(Collectors.joining("\n"));
         return "Daily fishvices:\n" + advices;

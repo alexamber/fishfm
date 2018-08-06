@@ -4,6 +4,7 @@ import fm.fish.config.FishFmConfig;
 import fm.fish.messenger.*;
 import fm.fish.messenger.movie.NowPlayingMovieMessenger;
 import fm.fish.messenger.movie.TopRatedMovieMessenger;
+import fm.fish.messenger.youtube.FishFmYouTubePlaylistUpdatesMessenger;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
@@ -38,6 +39,7 @@ public class BotMain {
                 .register(new WeekDayMessenger(bot, CHAT_ID))
                 .register(new NowPlayingMovieMessenger(bot, CHAT_ID))
                 .register(new TopRatedMovieMessenger(bot, CHAT_ID))
+                .register(new FishFmYouTubePlaylistUpdatesMessenger(bot, CHAT_ID))
                 .start();
     }
 
