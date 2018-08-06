@@ -14,8 +14,6 @@ import org.telegram.telegrambots.bots.AbsSender;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +27,9 @@ public class FindNewYoutubeVideoMessenger extends AbstractMessenger {
     private static List<String> GENRES = FishFmConfig.I.genres();
     private final Duration interval;
     private final VideoDuration duration;
-    private final LinkedHashMap<String, String> cachedVideos = CacheUtil.createCache(20);
+    private final LinkedHashMap<String, String> cachedTracks = CacheUtil.createCache(20);
+    private final LinkedHashMap<String, List<Track>> cashedArtistTrack = new LinkedHashMap<>();
+    private final LinkedHashMap<String, List<Artist>> cashedGenreArtists = new LinkedHashMap<>();
 
     public FindNewYoutubeVideoMessenger(AbsSender bot, long chatId, Duration interval, VideoDuration duration) {
         super(bot, chatId);
@@ -49,36 +49,47 @@ public class FindNewYoutubeVideoMessenger extends AbstractMessenger {
 
 
     private String getUniqueYoutubeVideoIds() {
-        List<String> permalinks = getYoutubeItems().stream()
+        return getYoutubeItem().stream()
                 .map(c -> c.getId().getVideoId())
-                .filter(p -> !cachedVideos.containsKey(p))
-                .collect(Collectors.toList());
-        String permalink = RandomUtil.dice(permalinks);
-        cachedVideos.put(permalink, permalink);
-        return permalink;
+                .findFirst().get();
     }
 
 
-    private List<Items> getYoutubeItems() {
-        List<String> artistsAndTracks = getArtistsAndTracks();
-        return YoutubeApiClient.getVideoByName(duration, RandomUtil.dice(artistsAndTracks)).getItems();
+    private List<Items> getYoutubeItem() {
+        List<String> artistsAndTracks = getArtistsAndTracks().stream()
+                .filter(c -> !cachedTracks.containsKey(c))
+                .collect(Collectors.toList());
+        String artistTrack = RandomUtil.dice(artistsAndTracks);
+        cachedTracks.put(artistTrack, artistTrack);
+        return YoutubeApiClient.getVideoByName(duration, artistTrack).getItems();
 
     }
 
     private List<String> getArtistsAndTracks() {
-        Collections.shuffle(GENRES);
-        String genre = GENRES.get(0);
 
-        List<Artist> artists = LastFMApiClient.getArtistByTag(genre).getTopartists().getArtist();
+        String genre = RandomUtil.dice(GENRES);
+        List<Artist> artists;
 
-        List<Track> tracks = new ArrayList<>();
-
-        for (Artist artist : artists) {
-            tracks.addAll(LastFMApiClient.getTopTracksByArtist(artist.getName()).getTopTracks().getTrackList());
+        if (cashedGenreArtists.get(genre).isEmpty()) {
+            artists = LastFMApiClient.getArtistByTag(genre).getTopartists().getArtist();
+            cashedGenreArtists.put(genre, artists);
+        } else {
+            artists = cashedGenreArtists.get(genre);
         }
 
+        Artist artist = RandomUtil.dice(artists);
+        List<Track> tracks;
+
+        if (cashedArtistTrack.get(artist.getName()).isEmpty()) {
+            tracks = LastFMApiClient.getTopTracksByArtist(artist.getName()).getTopTracks().getTrackList();
+            cashedArtistTrack.put(artist.getName(), tracks);
+        } else {
+            tracks = cashedArtistTrack.get(artist.getName());
+        }
         return tracks.stream()
                 .map(c -> c.getTrackArtist().getName() + " " + c.getName())
                 .collect(Collectors.toList());
     }
+
+
 }
