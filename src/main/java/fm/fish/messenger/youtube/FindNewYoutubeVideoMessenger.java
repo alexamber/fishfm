@@ -14,6 +14,7 @@ import org.telegram.telegrambots.bots.AbsSender;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,8 +29,8 @@ public class FindNewYoutubeVideoMessenger extends AbstractMessenger {
     private final Duration interval;
     private final VideoDuration duration;
     private final LinkedHashMap<String, String> cachedTracks = CacheUtil.createCache(20);
-    private final LinkedHashMap<String, List<Track>> cashedArtistTrack = new LinkedHashMap<>();
-    private final LinkedHashMap<String, List<Artist>> cashedGenreArtists = new LinkedHashMap<>();
+    private final HashMap<String, List<Track>> cashedArtistTrack = new HashMap<>();
+    private final HashMap<String, List<Artist>> cashedGenreArtists = new HashMap<>();
 
     public FindNewYoutubeVideoMessenger(AbsSender bot, long chatId, Duration interval, VideoDuration duration) {
         super(bot, chatId);
@@ -70,7 +71,7 @@ public class FindNewYoutubeVideoMessenger extends AbstractMessenger {
         String genre = RandomUtil.dice(GENRES);
         List<Artist> artists;
 
-        if (cashedGenreArtists.get(genre).isEmpty()) {
+        if (!cashedGenreArtists.containsKey(genre) && cashedGenreArtists.get(genre).isEmpty()) {
             artists = LastFMApiClient.getArtistByTag(genre).getTopartists().getArtist();
             cashedGenreArtists.put(genre, artists);
         } else {
@@ -80,7 +81,7 @@ public class FindNewYoutubeVideoMessenger extends AbstractMessenger {
         Artist artist = RandomUtil.dice(artists);
         List<Track> tracks;
 
-        if (cashedArtistTrack.get(artist.getName()).isEmpty()) {
+        if (!cashedArtistTrack.containsKey(genre) && cashedArtistTrack.get(artist.getName()).isEmpty()) {
             tracks = LastFMApiClient.getTopTracksByArtist(artist.getName()).getTopTracks().getTrackList();
             cashedArtistTrack.put(artist.getName(), tracks);
         } else {
